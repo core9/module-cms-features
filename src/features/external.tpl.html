@@ -1,0 +1,28 @@
+<h4>External features</h4>
+<p>These are external features, you can add new feature repositories via the settings panel (gears icon).</p>
+<table class="table table-striped">
+	<tbody ng-repeat="repo in repos">
+		<tr>
+			<th>Repository:</th>
+			<th ng-click="openRepo(repo._id)" colspan="3">{{repo.path}}</th>
+		</tr>
+		<tr ng-if="activeRepo == repo._id">
+			<th>Feature name</th>
+			<th>Description</th>
+			<th>Versions</th>
+			<th>Actions</th>
+		</tr>
+		<tr ng-if="activeRepo == repo._id" ng-repeat="feature in features">
+			<td>{{feature.name}}</td>
+			<td>{{feature.description}}</td>
+			<td>
+				<select ng-options="version as version for version in feature.versions" ng-model="repo.current[feature.name]"></select>
+			</td>
+			<td>
+				<button class="btn btn-success" ng-show="repo.current[feature.name] !== undefined" ng-click="apply(repo._id, feature, repo.current[feature.name])">Apply</button>
+				<button class="btn btn-danger" ng-show="repo.current[feature.name] != undefined" ng-click="deactivate(repo._id, feature)">Deactivate</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+

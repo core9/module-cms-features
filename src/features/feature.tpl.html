@@ -1,0 +1,66 @@
+<div class="row">
+	<h2>Feature {{feature.name}}</h2>
+	<p>You can edit your feature right here, add versions or modify existing versions</p>
+	<!-- Text input-->
+	<div class="row">
+		<label class="col-md-3 control-label">Feature name</label>  
+		<div class="col-md-9">
+			<input id="Feature name" ng-model="feature.name" type="text" placeholder="The name for your feature" class="form-control input-md" required="" />
+		</div>
+	</div>
+	<div class="row">
+		<label class="col-md-3 control-label">Description</label>
+		<div class="col-md-9">                     
+			<textarea class="form-control" id="description" ng-model="feature.description"></textarea>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<fieldset>
+		<legend>Versions</legend>
+		<div class="col-xs-12 col-md-4">
+			<h4>Version</h4>
+			<ul class="nav nav-pills nav-stacked">
+				<li ng-repeat="version in feature.versions" ng-click="select(version)" ng-class="{active: $parent.selectedVersion == version, disabled: $parent.selectedVersion}">
+					<a>{{version}}</a>
+				</li>
+			</ul>
+			<div class="input-group">
+				<input type="text" class="form-control" ng-model="versionName" placeholder="e.g. 0.1.5">
+				<span class="input-group-btn">
+					<button class="btn btn-success" ng-click="addVersion(versionName)">Add version</button>
+				</span>
+			</div>
+		</div>
+		<div class="col-xs-12 col-md-4" ng-show="selectedVersion">
+			<h4>Feature Type</h4>
+			<ul class="nav nav-pills nav-stacked">
+				<li ng-repeat="(type, template) in featureTypes" ng-click="$parent.selectedType = type" ng-class="{active: $parent.selectedType == type}">
+					<a>{{type}}</a>
+				</li>
+			</ul>
+		</div>
+		<div class="col-xs-12 col-md-4" ng-show="selectedType">
+			<h4>Contents</h4>
+			<div cn-feature-processor cn-processor-template="featureTypes[selectedType]" cn-selected-items="version[selectedType]"></div>
+		</div>
+	</fieldset>
+</div>
+<div class="row" ng-show="selectedVersion">
+	<fieldset>
+		<legend>Version actions</legend>
+		<button class="btn btn-success" ng-click="saveVersion()">Save</button>
+		<button class="btn btn-warning" ng-click="updateVersion()">Update selected content</button>
+		<button class="btn btn-danger" ng-click="removeVersion()">Delete selected version</button>
+	</fieldset>
+</div>
+<div class="row">
+	<fieldset>
+		<legend>Actions</legend>
+		<div class="pull-right">
+			<button class="btn btn-danger" ng-click="removeFeature()">Delete entire feature</button>
+			<button class="btn btn-success" ng-click="save()">Save</button>
+		</div>
+	</fieldset>
+</div>

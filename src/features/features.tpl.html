@@ -1,0 +1,14 @@
+<div>
+	<h2>Features <a ng-click="showConfig = !showConfig"><i class="fa fa-cogs pull-right"></i></a></h2>
+	<p>Manage your features in this section. A feature is a set of content, configuration or files. These sets can be exported to and imported from the features</p>
+	<div ng-if="showConfig" ng-include="'features/config/configuration.tpl.html'">
+	</div>
+	<tabset ng-show="!showConfig">
+		<tab heading="Internal" ng-controller="ConfigFeaturesInternalCtrl">
+			<div ng-include="'features/internal.tpl.html'"></div>
+		</tab>
+		<tab heading="External" ng-controller="ConfigFeaturesExternalCtrl">
+			<div ng-include="'features/external.tpl.html'"></div>
+		</tab>
+	</tabset>
+</div>

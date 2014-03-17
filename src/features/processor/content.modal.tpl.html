@@ -1,0 +1,31 @@
+<div>
+    <div class="modal-header">
+        <h3>Select your content</h3>
+    </div>
+    <div class="modal-body">
+        <label>Content type</label>
+        <select ng-options="type as type.label for type in contenttypes" ng-model="$parent.contenttype"></select>
+        <table class="table table-striped" ng-show="contentlist.length > 0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th ng-repeat="(fieldname, field) in contenttype.schema.properties" ng-show="contenttype.schemaOptions[fieldname].showInList">
+                        {{contenttype.schemaOptions[fieldname].label}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="content in contentlist">
+                    <td ng-click="select(content)" ng-class="{'bg-success': isSelected(content._id)}">{{content._id}}</td>
+                    <td ng-repeat="(fieldname, field) in contenttype.schema.properties" ng-show="contenttype.schemaOptions[fieldname].showInList" ng-click="select(content)" ng-class="{'bg-success': isSelected(content._id)}">
+                        {{content[fieldname]}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+</div>
+</div>

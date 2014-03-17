@@ -1,0 +1,30 @@
+<h4>Internal features</h4>
+<p>These are your internal features, they can only be accessed by your own site.</p>
+<table class="table table-striped">
+	<tr>
+		<th>Feature name</th>
+		<th>Description</th>
+		<th>Versions</th>
+		<th>Actions</th>
+	</tr>
+	<tr ng-repeat="feature in features">
+		<td>{{feature.name}}</td>
+		<td>{{feature.description}}</td>
+		<td>
+			<select ng-options="version as version for version in feature.versions" ng-model="internal.current[feature.name]"></select>
+		</td>
+		<td>
+			<button class="btn btn-success" ng-show="internal.current[feature.name] !== undefined" ng-click="apply(internal._id, feature, internal.current[feature.name])">Apply</button>
+			<button class="btn btn-warning" ng-click="edit(internal._id, feature.name)">Edit</button>
+			<button class="btn btn-danger" ng-show="internal.current[feature.name] != undefined" ng-click="deactivate(internal._id, feature)">Deactivate</button>
+		</td>
+	</tr>
+</table>
+<div class="pull-right col-md-6">
+	<div class="input-group">
+		<input type="text" class="form-control" ng-model="featureName" placeholder="e.g. blog">
+		<span class="input-group-btn">
+			<button class="btn btn-success" ng-click="add(featureName)">Add feature</button>
+		</span>
+	</div>
+</div>
