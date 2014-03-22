@@ -35,7 +35,7 @@ angular.module( 'core9Dashboard.feature', [
     ConfigFactory.query({configtype: 'featuresrepo_int'}, function (data) {
         if(data.length === 0) {
             $scope.internal = new ConfigFactory();
-            $scope.internal.$save({configtype: 'featuresrepo_int'});
+            $scope.internal.$save({configtype: 'featuresrepo_int', current: {}});
         } else {
             $scope.internal = data[0];
         }
