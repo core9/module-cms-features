@@ -17,7 +17,10 @@ angular.module( 'core9Dashboard.feature', [
                 templateUrl: 'features/features.tpl.html'
             }
         },
-        data:{ pageTitle: 'Features' }
+        data:{ 
+          pageTitle: 'Feature',
+          sidebar: 'config'
+        }
     })
     .state('editfeature', {
         url: '/config/features/:repo/{feature:.*}',
@@ -27,7 +30,10 @@ angular.module( 'core9Dashboard.feature', [
                 templateUrl: 'features/feature.tpl.html'
             }
         },
-        data:{ pageTitle: 'Feature' }
+        data:{ 
+          pageTitle: 'Feature',
+          sidebar: 'config'
+        }
     });
 })
 
@@ -35,7 +41,8 @@ angular.module( 'core9Dashboard.feature', [
     ConfigFactory.query({configtype: 'featuresrepo_int'}, function (data) {
         if(data.length === 0) {
             $scope.internal = new ConfigFactory();
-            $scope.internal.$save({configtype: 'featuresrepo_int', current: {}});
+            $scope.internal.current = {};
+            $scope.internal.$save({configtype: 'featuresrepo_int'});
         } else {
             $scope.internal = data[0];
         }
@@ -239,6 +246,6 @@ angular.module( 'core9Dashboard.feature', [
 })
 
 .run(function (MenuService) {
-    MenuService.add('config', {title: "Features", weight: 300, link: "/config/features"});
+    MenuService.add('config', {title: "Features", weight: 300, link: "features"});
 })
 ;
