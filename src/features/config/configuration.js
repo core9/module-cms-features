@@ -71,12 +71,19 @@ angular.module( 'core9Dashboard.feature.config', [
   };
 })
 
-.controller("FeaturesConfigurationEditRepoCtrl", function ($scope, $modalInstance, repo) {
+.controller("FeaturesConfigurationEditRepoCtrl", function ($scope, $http, $modalInstance, repo) {
   $scope.repo = repo;
 
   $scope.save = function () {
     if($scope.repo._id === undefined) {
       $scope.repo.$save(function (data) {
+        $http.post("/admin/featurerepository/" + data._id + "?pull")
+        .success(function(data) {
+          alert("Success");
+        })
+        .error(function(data) {
+          $scope.$emit("$error", data);
+        });
         $modalInstance.close(data);
       });
     } else {

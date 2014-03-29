@@ -27,7 +27,7 @@ angular.module( 'core9Dashboard.feature.private', [
   });
 
   $scope.add = function (repo, feature) {
-    $scope.edit($scope.repo._id, feature);
+    $scope.edit(repo, feature);
   };
 
   $scope.edit = function (repo, feature) {
