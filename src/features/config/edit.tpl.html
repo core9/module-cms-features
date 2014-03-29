@@ -1,0 +1,31 @@
+<div class="modal-header">
+  <h3>Add/edit repository</h3>
+</div>
+<div class="modal-body">
+  <!-- Text input-->
+  <div class="form-group row">
+    <label class="col-md-3 control-label">Repository path</label>  
+    <div class="col-md-9">
+      <input ng-model="repo.path" type="text" placeholder="E.g. github.com/core9/features-test" class="form-control input-md" required="">
+    </div>
+  </div>
+  <!-- Text input-->
+  <div class="form-group row">
+    <label class="col-md-3 control-label">Username</label>  
+    <div class="col-md-9">
+      <input ng-model="repo.user" type="text" placeholder="E.g. yourname" class="form-control input-md">
+    </div>
+  </div>
+  <!-- Text input-->
+  <div class="form-group row">
+    <label class="col-md-3 control-label" for="textinput">Password</label>  
+    <div class="col-md-9">
+      <input ng-model="repo.password" type="password" placeholder="E.g. mypassword" class="form-control input-md">
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-md-12">
+      <button class="btn btn-success pull-right" ng-click="save()">Save</button>
+    </div>
+  </div>
+</div>

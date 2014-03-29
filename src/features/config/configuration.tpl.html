@@ -1,82 +1,58 @@
-<div ng-controller="FeaturesConfigurationCtrl">
-	<fieldset>
-		<legend>Configuration</legend>
-		<tabset>
-			<tab heading="Git">
-				<h3>Git repositories</h3>
-				<p>You can manager your external git repositories over here. For anonymous checkout, please use the https URL.</p>
-				<table class="table table-striped">
-					<tr>
-						<th>ID</th>
-						<th>Repository</th>
-						<th>Username</th>
-						<th>Actions</th>
-					</tr>
-					<tr>
-						<td>{{internal._id}}</td>
-						<td>{{internal.path}}</td>
-						<td>{{internal.user}}</td>
-						<td>
-							<a class="btn btn-success" ng-click="downloadRepo(internal)"><i class="fa fa-cloud-download"></i></i></a>
-							<a class="btn btn-danger" ng-click="uploadRepo(internal)"><i class="fa fa-cloud-upload"></i></i></a>
-						</td>
-					<tr ng-show="repos.length > 0">
-						<th colspan="4">External repositories</th>
-					</tr>
-					<tr ng-repeat="repo in repos">
-						<td>{{repo._id}}</td>
-						<td>{{repo.path}}</td>
-						<td>{{repo.user}}</td>
-						<td>
-							<a class="btn btn-success" ng-click="downloadRepo(repo)"><i class="fa fa-cloud-download"></i></i></a>
-							<a class="btn btn-danger" ng-click="deleteRepo(repo)"><i class="fa fa-trash-o"></i></a>
-						</td>
-					</tr>
-				</table>
-				<fieldset>
-					<legend>Actions</legend>
-					<div class="pull-right">
-						<button class="btn btn-success" ng-click="showAddRepo = !showAddRepo" ng-show="!showAddRepo">Add external repository</button>
-						<button class="btn btn-warning" ng-click="showInternalRepo = !showInternalRepo" ng-show="!showInternalRepo">Edit internal repository</button>
-					</div>
-				</fieldset>
-				<fieldset ng-show="showInternalRepo">
-					<legend>Internal repository</legend>
-					<div class="input-group">
-						<span class="input-group-addon">Repository path</span>
-						<input type="text" class="form-control" ng-model="internal.path" />
-					</div>
-					<div class="input-group">
-						<span class="input-group-addon">Username</span>
-						<input type="text" class="form-control" ng-model="internal.user" />
-					</div>
-					<div class="input-group">
-						<span class="input-group-addon">Password</span>
-						<input type="password" class="form-control" ng-model="internal.password" />
-					</div>
-					<div class="pull-right">
-						<button class="btn btn-success" ng-click="save(internal); showInternalRepo = !showInternalRepo">Save</button>
-						<button class="btn btn-warning" ng-click="showInternalRepo = !showInternalRepo">Cancel</button>
-					</div>
-				</fieldset>
-				<fieldset ng-show="showAddRepo">
-					<legend>Add external repository</legend>
-					<div class="input-group">
-						<span class="input-group-addon">Repository path</span>
-						<input type="text" class="form-control" ng-model="newPath" />
-					</div>
-					<div class="input-group">
-						<span class="input-group-addon">Username</span>
-						<input type="text" class="form-control" ng-model="newUser" />
-					</div>
-					<div class="input-group">
-						<span class="input-group-addon">Password</span>
-						<input type="password" class="form-control" ng-model="newPassword" />
-					</div>
-					<button class="btn btn-success pull-right" ng-click="addRepo(newPath,newUser,newPassword); showAddRepo = !showAddRepo">Add</button>
-				</fieldset>
-			</tab>
-		</tabset>
-	</fieldset>
-	<hr />
-</div>
+<h1 class="page-header">Features configuration</h1>
+<tabset>
+	<tab heading="Git">
+		<h3>Git repositories</h3>
+		<p>You can manager your external git repositories over here. For anonymous checkout, please use the https URL.</p>
+		<table class="table table-striped">
+			<tr>
+				<th>ID</th>
+				<th>Repository</th>
+				<th>Username</th>
+				<th>Actions</th>
+			</tr>
+      <tr>
+        <th colspan="3">Private repositories</th>
+        <th>
+          <a class="btn btn-success" ng-click="add('featuresrepo_private', privaterepos)"><i class="fa fa-plus"></i> Add</a>
+        </th>
+      </tr>
+			<tr ng-repeat="repo in privaterepos">
+				<td>{{repo._id}}</td>
+				<td>{{repo.path}}</td>
+				<td>{{repo.user}}</td>
+				<td>
+          <a class="btn btn-success" ng-click="download(repo)" title="Download repository"><i class="fa fa-cloud-download"></i></i></a>
+          <a class="btn btn-warning" ng-click="upload(repo)" title="Upload repository"><i class="fa fa-cloud-upload"></i></i></a>
+          <a class="btn btn-warning" ng-click="edit(repo)" title="Edit repository"><i class="fa fa-cog"></i></i></a>
+          <a class="btn btn-danger" ng-click="delete(repo, privaterepos, $index)" title="Delete repository"><i class="fa fa-trash-o"></i></a>
+				</td>
+			<tr>
+				<th colspan="3">Public repositories</th>
+        <th>
+          <a class="btn btn-success" ng-click="add('featuresrepo_public', publicrepos)"><i class="fa fa-plus"></i> Add</a>
+        </th>
+			</tr>
+			<tr ng-repeat="repo in publicrepos">
+				<td>{{repo._id}}</td>
+				<td>{{repo.path}}</td>
+				<td>{{repo.user}}</td>
+				<td>
+          <a class="btn btn-success" ng-click="download(repo)" title="Download repository"><i class="fa fa-cloud-download"></i></i></a>
+          <a class="btn btn-warning" ng-click="edit(repo)" title="Edit repository"><i class="fa fa-cog"></i></i></a>
+					<a class="btn btn-danger" ng-click="delete(repo, publicrepos, $index)" title="Delete repository"><i class="fa fa-trash-o"></i></a>
+				</td>
+			</tr>
+		</table>
+    <fieldset>
+      <legend ng-click="showHelp = !showHelp">Help (toggle)</legend>
+      <div ng-show="showHelp">
+        <dl>
+          <dt>Private repository</dt>
+          <dd>A private repository is editable on your current website. This means you can edit your features and upload them.</dd>
+          <dt>Public repository</dt>
+          <dd>A public repository is read only, your features can only be edited only and you can only use the features.</dd>
+        </dl>
+      </div>
+    </fieldset>
+  </tab>
+</tabset>

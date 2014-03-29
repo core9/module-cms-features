@@ -1,45 +1,89 @@
 angular.module( 'core9Dashboard.feature.config', [
-  'core9Dashboard.config'
+  'core9Dashboard.config',
+  'ui.bootstrap'
 ])
 
-.controller("FeaturesConfigurationCtrl", function($scope, ConfigFactory, $http) {
-    $scope.repos = ConfigFactory.query({configtype: 'featuresrepo_ext'});
-    $scope.save = function (repo) {
-        repo.$update();
-    };
-    $scope.addRepo = function(path, user, password) {
-        if(path !== undefined) {
-            var newRepo = new ConfigFactory();
-            newRepo.path = path;
-            newRepo.user = user;
-            newRepo.password = password;
-            newRepo.$save({configtype: 'featuresrepo_ext'}, function(data) {
-                $scope.repos.push(data);
-            });
+.config(function ($stateProvider) {
+  $stateProvider.state('features.settings', {
+    url: '/config/features/settings',
+    controller: 'FeaturesConfigurationCtrl',
+    templateUrl: 'features/config/configuration.tpl.html',
+    data:{
+      context: 'back'
+    }
+  });
+})
+
+.controller("FeaturesConfigurationCtrl", function ($scope, ConfigFactory, $http, $modal) {
+  $scope.publicrepos = ConfigFactory.query({configtype: 'featuresrepo_public'});
+  $scope.privaterepos = ConfigFactory.query({configtype: 'featuresrepo_private'});
+
+  $scope.add = function (configtype, repositories) {
+    var newRepo = new ConfigFactory();
+    newRepo.configtype = configtype;
+    if(configtype === 'featuresrepo_public') {
+      $scope.publicrepos.push(newRepo);
+    } else {
+      $scope.privaterepos.push(newRepo);
+    }
+    $scope.edit(newRepo);
+  };
+
+  $scope.edit = function (repository) {
+    var modalInstance = $modal.open({
+      templateUrl: 'features/config/edit.tpl.html',
+      controller: 'FeaturesConfigurationEditRepoCtrl',
+      resolve: {
+        repo: function() {
+          return repository;
         }
-    };
-    $scope.deleteRepo = function(repo) {
-        repo.$remove(function() {
-            $scope.repos = ConfigFactory.query({configtype: 'featuresrepo_ext'});
-        });
-    };
-    $scope.downloadRepo = function(repo) {
-        $http.post("/admin/featurerepository/" + repo._id + "?pull")
-        .success(function(data) {
-            alert("Success");
-        })
-        .error(function(data) {
-            $scope.$emit("$error", data);
-        });
-    };
-    $scope.uploadRepo = function(repo) {
-        $http.post("/admin/featurerepository/" + repo._id + "?push")
-        .success(function(data) {
-            alert("Success");
-        })
-        .error(function(data) {
-            $scope.$emit("$error", data);
-        });
-    };
+      }
+    });
+    modalInstance.result.then(function (updated) {
+      repository = updated;
+    });
+  };
+
+  $scope.download = function (repository) {
+    $http.post("/admin/featurerepository/" + repository._id + "?pull")
+    .success(function(data) {
+      alert("Success");
+    })
+    .error(function(data) {
+      $scope.$emit("$error", data);
+    });
+  };
+
+  $scope.upload = function (repository) {
+    $http.post("/admin/featurerepository/" + repository._id + "?push")
+    .success(function(data) {
+      alert("Success");
+    })
+    .error(function(data) {
+      $scope.$emit("$error", data);
+    });
+  };
+
+  $scope.delete = function (repository, list, index) {
+    repository.$remove(function () {
+      list.splice(index, 1);
+    });
+  };
+})
+
+.controller("FeaturesConfigurationEditRepoCtrl", function ($scope, $modalInstance, repo) {
+  $scope.repo = repo;
+
+  $scope.save = function () {
+    if($scope.repo._id === undefined) {
+      $scope.repo.$save(function (data) {
+        $modalInstance.close(data);
+      });
+    } else {
+      $scope.repo.$update(function (data) {
+        $modalInstance.close(data);
+      });
+    }
+  };
 })
 ;

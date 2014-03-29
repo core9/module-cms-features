@@ -1,0 +1,65 @@
+<h4>Private features</h4>
+<p>These are your private (internal) features, they can only be accessed by your own site. Choose a repository to view the features</p>
+<accordion>
+  <accordion-group heading="{{repo.path}}" ng-repeat="repo in repos">
+    <fieldset>
+      <legend>Actions</legend>
+      <div class="form-group row">
+        <div class="col-md-8">
+          <button class="btn btn-success" ng-click="download(repo)"><i class="fa fa-cloud-download"></i> Download</button>
+          <button class="btn btn-warning" ng-click="upload(repo)"><i class="fa fa-cloud-upload"></i> Upload</button>
+        </div>
+      </div>
+    </fieldset>
+    <table class="table table-striped table-bordered">
+      <tr>
+        <th>Feature name</th>
+        <th>Description</th>
+        <th>Versions</th>
+        <th>Actions</th>
+      </tr>
+      <tr ng-repeat="feature in features[repo._id]">
+        <td>{{feature.name}}</td>
+        <td>{{feature.description}}</td>
+        <td>
+          <div ng-if="loading === feature.name">
+            <i class="fa fa-spinner fa-spin"></i> Loading
+          </div>
+          <div ng-if="loading !== feature.name">
+            <select ng-options="version for version in feature.versions" ng-model="repo.current[feature.name]"></select>
+          </div>
+        </td>
+        <td>
+          <button class="btn btn-success" 
+                  ng-show="repo.current[feature.name] !== undefined" 
+                  ng-click="apply(repo, feature, repo.current[feature.name])">
+            Apply
+          </button>
+          <button class="btn btn-warning" 
+                  ng-click="edit(repo, feature.name)">
+            Edit
+          </button>
+          <button 
+                  class="btn btn-danger" 
+                  ng-show="repo.current[feature.name] != undefined" 
+                  ng-click="deactivate(repo, feature)">
+            Deactivate
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <div class="form-group row">
+            <label class="col-md-3 control-label">New feature name</label>  
+            <div class="col-md-8 input-group">
+              <input ng-model="featureName" type="text" placeholder="E.g. blog" class="form-control input-md" required="">
+              <span class="input-group-btn">
+                <button class="btn btn-success" ng-click="add(repo, featureName)">Add feature</button>
+              </span>  
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </accordion-group>
+</accordion>
