@@ -154,14 +154,6 @@ angular.module( 'core9Dashboard.feature', [
         });
     };
 
-    $scope.updateVersion = function () {
-        $http.post("/admin/featurerepository/" + $stateParams.repo + "/" + encodeURIComponent($stateParams.feature) + "-v" + $scope.selectedVersion)
-        .success(function (data) {
-            $scope.version = data;
-            alert("Your contents are updated.");
-        });
-    };
-
     $scope.selectedVersion = false;
     $scope.select = function (version) {
         var change = true;
