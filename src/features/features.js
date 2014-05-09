@@ -88,10 +88,10 @@ angular.module( 'core9Dashboard.feature', [
 .controller("ConfigFeaturesFeatureCtrl", function ($scope, $http, $state, $stateParams) {
     $http.get("/admin/featurerepository/" + $stateParams.repo + "/" + encodeURIComponent($stateParams.feature))
     .success(function (data) {
-        if(data === "") {
-            $scope.feature = {name: $stateParams.feature};
-        } else {
+        if(typeof data === 'object') {
             $scope.feature = data;
+        } else {
+            $scope.feature = {name: $stateParams.feature};
         }
     })
     .error(function (data) {
